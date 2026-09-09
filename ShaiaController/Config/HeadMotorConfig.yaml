@@ -1,0 +1,56 @@
+# Motor config for Shaia's head.
+#
+# All five axes are protocol 2.0 Dynamixels on one FTDI port (DXL_PORT in
+# Def.h). `min`/`max` are degrees in Dynamixel space and define what the
+# normalized position 0 and 1 map to:
+#
+#     goal_deg = normalized * (max - min) + min
+#
+# Note that several axes have min > max - that is intentional, it is how the
+# ranges are wired in Shaia/GestureInput/Shaiahead.py, and it means 0 always
+# reads as "one end of the travel" rather than "the lower degree value".
+#
+# `name` must match a HeadCommand in HeadCommands.h.
+# `default` is the normalized pose the axis moves to on startup.
+# `defaultVel` is the normalized [0, 1] profile velocity used when a command
+# does not carry one (it is scaled by 2047 into Dynamixel units).
+# `operatingMode` is the Dynamixel operating mode register: 3 = position
+# (default), 4 = extended position, 5 = current based position.
+-
+  id: 10
+  name: headTurn
+  min: 100          # deg
+  max: 260          # deg
+  default: 0.5
+  defaultVel: 0.02
+-
+  id: 11
+  name: headTilt
+  min: 140          # deg - normalized 0 is head down
+  max: 64           # deg - normalized 1 is head up
+  default: 0.5
+  defaultVel: 0.03
+-
+  id: 12
+  name: mouth
+  min: 341          # deg - normalized 0 is closed
+  max: 320          # deg - normalized 1 is open
+  default: 0.0
+  defaultVel: 0.25
+-
+  id: 13
+  name: neckTilt
+  min: 156          # deg
+  max: 210          # deg
+  default: 0.5
+  defaultVel: 0.01
+-
+  id: 14
+  name: neckTurn
+  min: -40          # deg
+  max: 70           # deg
+  default: 0.5
+  defaultVel: 0.015
+  # Extended position control: this range spans negative degrees and single
+  # turn position mode only covers [0, 360).
+  operatingMode: 4
